@@ -32,7 +32,7 @@ int	find_sym(char sym, char *base)
 	return (-1);
 }
 
-int digit_length_base(signed long int num, int base)
+int digit_length_base(long num, int base)
 {
   int n = 0;
   if (num < 0)
@@ -40,7 +40,6 @@ int digit_length_base(signed long int num, int base)
     num = -num;
     n++;
   }
-
   if (num == 0)
     return (1);
 
@@ -51,4 +50,5 @@ int digit_length_base(signed long int num, int base)
     num /= base;
     n++;
   }
+  return (n);
 }

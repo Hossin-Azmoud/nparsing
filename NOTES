@@ -1,0 +1,1 @@
+1) Make the parsing auto so the base can be guessed by the parsing function if the base was passed as null.

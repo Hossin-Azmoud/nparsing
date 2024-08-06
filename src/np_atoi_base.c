@@ -1,27 +1,47 @@
 #include <nparsing.h>
+#include <stdio.h>
 
-signed long int np_atoi_base(char *a, char *base)
+long np_atoi_base(char *a, char *base)
 {
-  signed long int num;
+  long num;
+  const char *ptr;
   int blen;
   int sign;
-  int iter;
-
-  blen = is_base_valid(base);
-  if (blen < 2) return (0);
-  num = 0;
-  iter = 0;
+  // NOTE: What if the base == NULL.
+  if (a == NULL)
+    return (0);
   sign = 1;
-  while (a[iter] == '-' || a[iter] == '+' || isspace(a[iter])) {
-    if (a[iter] == '-')
+  while (*a == '-' || *a == '+' || isspace(*a)) {
+    if (*a == '-')
       sign *= -1;
-    iter++;
+    a++;
   }
-  int sym_idx = find_sym(a[iter], base);
-  while (sym_idx >= 0) {
+  if (base == NULL) {
+    ptr = a;
+    // NOTE: Dont forget to jump two letters with a += 2; or the lenth of the base sequence.
+    base = BASE_10_ASCII;  
+    if (strncmp(BASE_16_PREFIX, ptr, 2) == 0) {
+      base = BASE_16_ASCII;
+      a += 2;
+    } else if (strncmp(BASE_16_PREFIX_UP, ptr, 2) == 0) {
+      base = BASE_16_ASCII_UP;
+      a += 2;
+    } else if (strncmp(BASE_BIN_PREFIX, ptr, 2) == 0) {
+      base = BASE_BIN_ASCII;
+      a += 2;
+    }
+  }
+  blen = is_base_valid(base);
+  if (blen < 2)
+    return (0);
+  num = 0;
+  int sym_idx;
+  while (*a) {
+    sym_idx = find_sym(*a++, base);
+    if (sym_idx < 0)
+      break;
     num *= blen;
     num += sym_idx;
-    sym_idx = find_sym(a[++iter], base);
   }
   return (num * sign);
 }

@@ -1,5 +1,4 @@
 #include <nparsing.h>
-#include <assert.h>
 
 float np_atof(char *a)
 {
