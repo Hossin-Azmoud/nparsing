@@ -5,7 +5,7 @@
 #include <string.h>
 #include <assert.h>
 #include <ctype.h>
-
+#include <math.h>
 #define BASE_16_ASCII     "0123456789abcdef"
 #define BASE_16_ASCII_UP  "0123456789abcdef"
 #define BASE_10_ASCII     "0123456789"
@@ -14,6 +14,17 @@
 #define BASE_16_PREFIX      "0X"
 #define BASE_16_PREFIX_UP   "0x"
 #define BASE_BIN_PREFIX     "0b"
+
+typedef struct cstr_s {
+  char *data;
+  size_t size;
+} cstr_t;
+
+typedef struct float_parts_s
+{
+  cstr_t decimal;
+  cstr_t integer;
+} float_parts_t;
 
 long np_atoi_base(char *a, char *base);
 float np_atof(char *a);

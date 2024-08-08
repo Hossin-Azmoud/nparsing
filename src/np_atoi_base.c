@@ -1,5 +1,4 @@
 #include <nparsing.h>
-#include <stdio.h>
 
 long np_atoi_base(char *a, char *base)
 {
@@ -31,6 +30,7 @@ long np_atoi_base(char *a, char *base)
       a += 2;
     }
   }
+
   blen = is_base_valid(base);
   if (blen < 2)
     return (0);

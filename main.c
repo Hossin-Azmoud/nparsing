@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <limits.h>
 #include <nparsing.h>
+
 // NOTE: This is for tests.
 static int count = 0;
 static int err = 0;
@@ -26,6 +27,16 @@ void Test_np_itoa(long nbr, char *base, char *expected)
   count++;
 }
 
+void Test_np_atof(char *fs, float expected)
+{
+  float f = np_atof(fs);
+  if (f - expected != 0) {
+    fprintf(stderr, "[ERROR] expected %f but got %f\n", expected, f);
+    err++;
+  }
+  count++;
+}
+
 int main(int ac, char **av)
 {
   {
@@ -40,7 +51,13 @@ int main(int ac, char **av)
     Test_np_itoa(0x7fffffff, BASE_16_ASCII, "7fffffff");
     Test_np_itoa(-0x80000000, BASE_16_ASCII, "-80000000");
   }
-
+  {
+    Test_np_atof("1.2", 1.2f);
+    Test_np_atof("232.113230923", 232.113230923f);
+    Test_np_atof("10.2", 10.2f);
+    Test_np_atof("3.14", 3.14f);
+    Test_np_atof("20.27839283929", 20.27839283929f);
+  }
   printf("OK: %i%%\n", (count - err) * 100 * 1/count);
   printf("ERR: %i%%\n", (err) * 100 * 1/count);
   return (0);
