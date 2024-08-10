@@ -9,7 +9,7 @@ INCLUDE=-I ./include/
 MAIN=main.c
 BIN=main
 
-all: $(BIN)
+all: $(BIN) clean
 
 .c.o:
 	$(CC) $(CFLAG) $(INCLUDE) -c $< -o $@ $(LIB) 
