@@ -58,6 +58,7 @@ int main(int ac, char **av)
     Test_np_atof("3.14", 3.14f);
     Test_np_atof("20.27839283929", 20.27839283929f);
   }
+
   printf("OK: %i%%\n", (count - err) * 100 * 1/count);
   printf("ERR: %i%%\n", (err) * 100 * 1/count);
   return (0);
