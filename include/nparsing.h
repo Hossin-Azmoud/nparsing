@@ -31,7 +31,9 @@ float np_atof(char *a);
 char  *np_ftoa(float f);
 char  *np_itoa_base(int i, char *base);
 
-// UTIL FUNCTIONS TO WORK WITH.
+char *np_itoa(int m);
+long np_atoi(char *s);
+
 int	find_sym(char sym, char *base);
 int is_base_valid(char *base);
 int digit_length_base(long num, int base);
