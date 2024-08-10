@@ -46,7 +46,7 @@ float np_atof(char *f)
 
   float_parts_t *fl;
   long int_ = 0.0f;
-  int i = 0;
+  size_t i = 0;
   float exp_pos = -1;
   float final = 0.0f;
   if (f == NULL)
@@ -73,6 +73,7 @@ float np_atof(char *f)
 
 char  *np_ftoa(float f)
 {
+  (void)f;
   assert(0 && "Function np_ftoa is not impl yet.");
 }
 

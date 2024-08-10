@@ -37,8 +37,9 @@ void Test_np_atof(char *fs, float expected)
   count++;
 }
 
-int main(int ac, char **av)
+int main()
 {
+   
   {
     // ATOI TESTS,
     Test_np_atoi("0xff", NULL, 255);
