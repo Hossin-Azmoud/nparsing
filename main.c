@@ -1,5 +1,7 @@
+#include "include/nparsing.h"
 #include <stdio.h>
 #include <limits.h>
+#include <time.h>
 #include <nparsing.h>
 
 // NOTE: This is for tests.
@@ -36,6 +38,27 @@ void Test_np_atof(char *fs, float expected)
   }
   count++;
 }
+#define COUNT 100 * 1000
+void speed_test_atof()
+{
+  int count = COUNT;
+  const char *n = "0.72873823";
+  clock_t s = clock(); 
+  double x;
+  while (count > 0) {
+    x = atof(n);
+    count--;
+  }
+  count = COUNT;
+  printf("[x - %f] TOKK ATOF: %.4f ms\n",
+x, (clock() - s) * 1000.0 / CLOCKS_PER_SEC);
+  s = clock();
+  while (count > 0) {
+    x = np_atof((char *)n);
+    count--;
+  }
+  printf("[x - %f] TOKK ATOF: %.4f ms\n", x, (clock() - s) * 1000.0 / CLOCKS_PER_SEC);
+}
 
 int main()
 {
@@ -58,8 +81,18 @@ int main()
     Test_np_atof("10.2", 10.2f);
     Test_np_atof("3.14", 3.14f);
     Test_np_atof("20.27839283929", 20.27839283929f);
+    speed_test_atof();
   }
-
+  
+  printf("%s\n", np_ftoa(12));
+  printf("%s\n", np_ftoa(1.342342));
+  printf("%s\n", np_ftoa(1.12));
+  printf("%s\n", np_ftoa(0.3 + 0.3 + 0.3));
+  printf("=============================\n");
+  printf("%.8f\n", (12.0));
+  printf("%.8f\n", (1.1));
+  printf("%.8f\n", (1.12));
+  printf("%.8f\n", (0.3 + 0.3 + 0.3));
   printf("OK: %i%%\n", (count - err) * 100 * 1/count);
   printf("ERR: %i%%\n", (err) * 100 * 1/count);
   return (0);

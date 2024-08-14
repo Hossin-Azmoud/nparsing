@@ -1,79 +1,100 @@
 #include <nparsing.h>
 #include <stdio.h>
+#include <string.h>
+
+static char *decimal;
+static char *integer;
+
 static char *safe_strdup(char *s)
 {
   return (s == NULL) ? NULL : strdup(s);
 }
 
-float_parts_t *parse_f(char *f)
+static int parse_f(char *f)
 {
-  float_parts_t *parts = malloc(sizeof(*parts)); 
   char *int_, *dec_;
-  memset(parts, 0, sizeof(*parts));
   char *copy = safe_strdup(f);
   int_ = strtok(copy, ".");
-  (parts->integer).data = safe_strdup(int_);
-  if ((parts->integer).data == NULL || *((parts->integer).data) == 0)
+  integer = safe_strdup(int_);
+  if (integer == NULL || *integer == 0)
   {
-    free(parts);
     free(copy);
-    return (NULL);
+    return (0);
   }
-  (parts->integer).size = strlen(parts->integer.data);
 
   dec_ = strtok(NULL, ".");
-  (parts->decimal).data = safe_strdup(dec_);
+  decimal = safe_strdup(dec_);
   free(copy);
-  if ((parts->decimal).data == NULL || *((parts->decimal).data) == 0)
-    return (parts);
-  (parts->decimal).size = strlen(parts->decimal.data);
-  return (parts);
+  return (1);
 }
-
-void free_float_parts_t(float_parts_t *fl)
-{
-  if (fl) {
-    if (fl->decimal.data)
-      free(fl->decimal.data);
-    if (fl->integer.data)
-      free(fl->integer.data);
-    free(fl);
-  }
-}
+#define cache 0
+#if cache
+  static float _prev_out;
+  static char *prev_in;
+#endif
 
 float np_atof(char *f)
 {
-
-  float_parts_t *fl;
+  #if cache
+    if (prev_in) {
+      if (strcmp(prev_in, (const char *)f) == 0)
+        return (_prev_out);
+    }
+    prev_in = f;
+  #endif
   long int_ = 0.0f;
-  size_t i = 0;
   float exp_pos = -1;
   float final = 0.0f;
+  char *ptr;
   if (f == NULL)
     return (final);
-  fl = parse_f(f);
-  if (fl != NULL)
-  {
-    int_ = np_atoi_base(fl->integer.data, NULL);
-    if (fl->decimal.data) {
-      while (i < fl->decimal.size) {
-        // printf("Dig: %f ascii: %c\n", (fl->decimal.data[i] - '0') * powf(10.0f, exp_pos), fl->decimal.data[i]);
-        final += (fl->decimal.data[i] - '0') * powf(10.0f, exp_pos);
-        i++;
+  decimal = NULL;
+  integer = NULL;
+  if (parse_f(f)) {
+    int_ = np_atoi_base(integer, NULL);
+    if (decimal) {
+      ptr = decimal;
+      while (*ptr) {
+        final += (*ptr - '0') * powf(10.0f, exp_pos);
+        ptr++;
         exp_pos--;
       }
+      free(decimal);
     }
+    free(integer);
   }
-  // TODO: free the thingy and return 0.0f
-  free_float_parts_t(fl);
   final += int_;
+  #if cache
+    _prev_out = final;
+  #endif
   return (final);
 }
 
-
+#define MAX_PRECISON 8
 char  *np_ftoa(float f)
 {
-  (void)f;
-  assert(0 && "Function np_ftoa is not impl yet.");
+  int sym_count;
+  int j, i;
+  char *bf;
+  char *int_p;
+
+  sym_count = digit_length_base(f, 10) + MAX_PRECISON;
+  bf = malloc(sym_count + 2);
+  memset(bf, 0, sym_count + 2);
+  int_p = np_itoa_base(f, NULL);
+  bf = memcpy(bf, int_p, sym_count - MAX_PRECISON);
+  j = (sym_count - MAX_PRECISON);
+  f -= (long)f;
+  if (f == 0)
+    return (bf);
+  bf[j++] = '.';
+  i = 0;
+  while (i < MAX_PRECISON) {
+    f -= (long)f;
+    f *= 10;
+    bf[j++] = (long)(f) + '0';
+    i++;
+  }
+  return (bf);
 }
 
