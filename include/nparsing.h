@@ -15,6 +15,7 @@
 #define BASE_16_PREFIX_UP   "0x"
 #define BASE_BIN_PREFIX     "0b"
 
+#define MAX_FLOAT_PRECISON 6
 long np_atoi_base(char *a, char *base);
 float np_atof(char *a);
 char  *np_ftoa(float f);

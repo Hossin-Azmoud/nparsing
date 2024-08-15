@@ -1,6 +1,6 @@
 CC=gcc
 PRE=./src/
-SRC=util.c np_float.c np_atoi_base.c np_itoa_base.c np_itoa.c np_atoi.c 
+SRC=util.c np_ftoa.c np_atof.c np_atoi_base.c np_itoa_base.c np_itoa.c np_atoi.c 
 SRCS=$(addprefix $(PRE), $(SRC))
 OBJ=$(SRCS:.c=.o)
 CFLAG=-ggdb -Wall -Wextra -Werror

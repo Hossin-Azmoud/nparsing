@@ -1,1 +1,0 @@
-gcc -I ./include/ main.c ./src/*.c -lm -o /tmp/main76 && /tmp/main76 && rm /tmp/main76
