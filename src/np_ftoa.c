@@ -8,8 +8,7 @@ char  *np_ftoa(float f)
   char *int_p;
 
   sym_count = digit_length_base(f, 10) + MAX_FLOAT_PRECISON;
-  bf = malloc(sym_count + 2);
-  memset(bf, 0, sym_count + 2);
+  bf = calloc(sym_count + 2, 1);
   int_p = np_itoa_base(f, NULL);
   bf = memcpy(bf, int_p, sym_count - MAX_FLOAT_PRECISON);
   j = (sym_count - MAX_FLOAT_PRECISON);
@@ -27,4 +26,3 @@ char  *np_ftoa(float f)
   }
   return (bf);
 }
-

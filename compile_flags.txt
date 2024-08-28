@@ -1,0 +1,7 @@
+-ggdb
+-Wall
+-Wextra
+-Werror
+-I
+./include/
+-lm
